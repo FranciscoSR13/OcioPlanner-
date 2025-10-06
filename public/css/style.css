@@ -1,0 +1,4 @@
+/* estilos adicionales */
+@media (max-width: 640px) {
+  #frame { margin: 0 8px; }
+}
