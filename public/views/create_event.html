@@ -1,0 +1,28 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-2xl font-bold mb-4 text-blue-600 text-center">Crear Nuevo Evento</h1>
+  <div class="max-w-md mx-auto bg-white p-4 rounded-xl shadow">
+    <input id="title" placeholder="Nombre del evento" class="border p-2 w-full mb-2 rounded">
+    <textarea id="description" placeholder="Descripción" class="border p-2 w-full mb-2 rounded"></textarea>
+    <input id="date" type="datetime-local" class="border p-2 w-full mb-2 rounded">
+    <input id="location" placeholder="Lugar" class="border p-2 w-full mb-2 rounded">
+    <input id="options" placeholder="Opciones (separadas por coma)" class="border p-2 w-full mb-3 rounded">
+
+    <button onclick="createEvent()" class="bg-blue-600 text-white w-full py-2 rounded">Crear Evento</button>
+  </div>
+</div>
+
+<script src="../js/api.js"></script>
+<script>
+async function createEvent() {
+  const data = {
+    title: title.value,
+    description: description.value,
+    date: date.value,
+    location: location.value,
+    options: options.value.split(",").map(o=>o.trim())
+  };
+  const res = await apiPost("/events", data);
+  alert(res.message || res.error);
+  if (res.message) window.location.href = "dashboard.html";
+}
+</script>

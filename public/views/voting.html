@@ -1,0 +1,31 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-2xl font-bold mb-4 text-blue-600 text-center">Votaciones</h1>
+  <div id="votingList" class="space-y-3"></div>
+</div>
+
+<script src="../js/api.js"></script>
+<script>
+async function loadVoting() {
+  const res = await apiGet("/events");
+  const list = document.getElementById("votingList");
+  list.innerHTML = res.map(e => `
+    <div class="bg-white rounded-xl p-4 shadow">
+      <h2 class="font-bold">${e.title}</h2>
+      ${Object.keys(e.votes || {}).map(o => `
+        <label class="flex justify-between">
+          <input type="radio" name="vote-${e._id}" value="${o}">${o}
+          <span>${e.votes[o]} votos</span>
+        </label>`).join("")}
+      <button class="mt-2 bg-blue-500 text-white px-3 py-1 rounded" onclick="vote('${e._id}')">Votar</button>
+    </div>
+  `).join('');
+}
+async function vote(id) {
+  const selected = document.querySelector(`input[name='vote-${id}']:checked`);
+  if (!selected) return alert("Selecciona una opción");
+  const res = await apiPost(`/events/${id}/vote`, { option: selected.value });
+  alert(res.message || res.error);
+  loadVoting();
+}
+loadVoting();
+</script>

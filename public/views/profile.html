@@ -1,0 +1,23 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-2xl font-bold mb-4 text-blue-600 text-center">Perfil de Usuario</h1>
+  <div class="bg-white p-6 rounded-xl shadow text-center max-w-md mx-auto">
+    <img src="../img/default-avatar.png" class="w-24 h-24 rounded-full mx-auto mb-4">
+    <h2 id="userName" class="text-xl font-semibold">Nombre</h2>
+    <p id="userEmail" class="text-gray-600">correo@example.com</p>
+    <hr class="my-4">
+    <h3 class="font-bold text-blue-600 mb-2">Historial de eventos</h3>
+    <div id="userEvents" class="text-left"></div>
+  </div>
+</div>
+
+<script src="../js/api.js"></script>
+<script>
+async function loadProfile() {
+  const res = await apiGet("/auth/me");
+  userName.textContent = res.name;
+  userEmail.textContent = res.email;
+  const ev = await apiGet("/events/user");
+  userEvents.innerHTML = ev.map(e=>`<p>• ${e.title}</p>`).join('');
+}
+loadProfile();
+</script>

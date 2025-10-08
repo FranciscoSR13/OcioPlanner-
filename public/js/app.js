@@ -1,4 +1,5 @@
 // public/js/app.js
+/*
 const V = {
   el: document.getElementById('view-container'),
   nav: document.getElementById('nav-placeholder'),
@@ -71,4 +72,47 @@ function logout(){
     } catch(e){ V.clearToken(); }
   }
   navigate('login');
-})();
+})();*/
+
+// --- app.js ---
+// Sistema de navegación SPA (Single Page Application)
+const container = document.getElementById("view-container");
+
+// Mapa de vistas disponibles
+const views = [
+  "login",
+  "register",
+  "dashboard",
+  "createEvent",
+  "voting",
+  "calendar",
+  "chat",
+  "profile"
+];
+
+// Función para cargar una vista
+async function loadView(view) {
+  if (!views.includes(view)) view = "login"; // vista por defecto
+
+  try {
+    const res = await fetch(`/views/${view}.html`);
+    const html = await res.text();
+    container.innerHTML = html;
+    window.location.hash = view; // actualiza la URL sin recargar
+  } catch (err) {
+    container.innerHTML = `<p class="text-red-500">Error al cargar la vista: ${view}</p>`;
+  }
+}
+
+// Detectar cambios en el hash de la URL (ej: #dashboard)
+window.addEventListener("hashchange", () => {
+  const view = window.location.hash.replace("#", "");
+  loadView(view);
+});
+
+// Cargar vista inicial
+window.addEventListener("DOMContentLoaded", () => {
+  const view = window.location.hash.replace("#", "") || "login";
+  loadView(view);
+});
+

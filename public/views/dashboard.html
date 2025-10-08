@@ -1,0 +1,29 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-2xl font-bold mb-4 text-blue-600 text-center">Panel Principal</h1>
+  <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+    <button onclick="go('createEvent.html')" class="btn">➕ Crear Evento</button>
+    <button onclick="go('voting.html')" class="btn">🗳️ Votaciones</button>
+    <button onclick="go('calendar.html')" class="btn">📅 Calendario</button>
+    <button onclick="go('chat.html')" class="btn">💬 Chat</button>
+    <button onclick="go('profile.html')" class="btn">👤 Perfil</button>
+    <button onclick="loadEvents()" class="btn col-span-2">🎯 Próximos eventos</button>
+  </div>
+
+  <div id="eventsList" class="mt-6"></div>
+</div>
+
+<script src="../js/api.js"></script>
+<script>
+function go(page){ window.location.href = page; }
+
+async function loadEvents() {
+  const res = await apiGet("/events");
+  const list = document.getElementById("eventsList");
+  list.innerHTML = res.map(e => `
+    <div class="bg-white rounded-lg p-3 shadow mt-3">
+      <h2 class="font-bold text-lg">${e.title}</h2>
+      <p>${e.description}</p>
+      <p class="text-sm text-gray-500">${new Date(e.date).toLocaleDateString()}</p>
+    </div>`).join('');
+}
+</script>
